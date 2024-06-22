@@ -1,5 +1,11 @@
 spring:
-  security:
-    user:
-      name: user
-      password: 1111
+  datasource:
+    url: jdbc:mysql://localhost:3306/eazybank
+    username: root
+    password: pcs8437!
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#        dialect: org.hibernate.dialect.MySQLDialect
