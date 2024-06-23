@@ -3,6 +3,7 @@ package com.andrew.springsecuritybasic.config;
 import com.andrew.springsecuritybasic.mdoel.Customer;
 import com.andrew.springsecuritybasic.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class EazybankUserDetails implements UserDetailsService {
+//@Service
+public class CustomUserDetails implements UserDetailsService {
 
-    @Autowired
+//    @Autowired
     private CustomerRepository customerRepository;
 
     @Override
