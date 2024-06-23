@@ -4,6 +4,7 @@ import com.andrew.springsecuritybasic.controller.dto.CustomerDto;
 import com.andrew.springsecuritybasic.mdoel.Customer;
 import com.andrew.springsecuritybasic.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,12 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Customer register(CustomerDto.RegisterRequest request) {
+        String encodedPasswd = passwordEncoder.encode(request.getPwd());
+
         Customer customer = Customer.builder()
                 .email(request.getEmail())
-                .pwd(request.getPwd())
+                .pwd(encodedPasswd)
                 .role(request.getRole())
                 .build();
 
