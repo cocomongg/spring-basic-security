@@ -10,7 +10,9 @@ public class CustomerDto {
     @NoArgsConstructor
     @Getter
     public static class RegisterRequest {
+        private String name;
         private String email;
+        private String mobileNumber;
         private String pwd;
         private String role;
     }
