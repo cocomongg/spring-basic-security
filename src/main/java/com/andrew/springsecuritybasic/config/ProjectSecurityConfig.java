@@ -1,6 +1,9 @@
 package com.andrew.springsecuritybasic.config;
 
+import com.andrew.springsecuritybasic.filter.AuthoritiesLoggingAfterFilter;
+import com.andrew.springsecuritybasic.filter.AuthoritiesLoggingAtFilter;
 import com.andrew.springsecuritybasic.filter.CsrfCookieFilter;
+import com.andrew.springsecuritybasic.filter.RequestValidationBeforeFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -25,8 +28,12 @@ public class ProjectSecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(requests -> requests
-                .requestMatchers("/myAccount", "/myBalance", "/myLoans", "/myCards", "/user").authenticated()
-                .requestMatchers("/notices", "/contact", "/register").permitAll())
+                        .requestMatchers("/myAccount").hasRole("USER")
+                        .requestMatchers("/myBalance").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/myLoans").hasRole("USER")
+                        .requestMatchers("/myCards").hasRole("USER")
+                        .requestMatchers("/user").authenticated()
+                        .requestMatchers("/notices", "/contact", "/register").permitAll())
         .securityContext(securityContext -> securityContext.requireExplicitSave(false))
         .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
         .formLogin(Customizer.withDefaults())
@@ -36,7 +43,11 @@ public class ProjectSecurityConfig {
         .csrf(csrf -> csrf.csrfTokenRequestHandler(this.csrfTokenRequestHandler())
                 .ignoringRequestMatchers("/contact", "/register")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-        .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class);
+        .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+        .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+        .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+        .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class);
+
 
         return http.build();
     }
