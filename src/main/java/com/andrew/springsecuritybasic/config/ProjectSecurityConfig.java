@@ -1,5 +1,7 @@
 package com.andrew.springsecuritybasic.config;
 
+import com.andrew.springsecuritybasic.filter.AuthoritiesLoggingAfterFilter;
+import com.andrew.springsecuritybasic.filter.AuthoritiesLoggingAtFilter;
 import com.andrew.springsecuritybasic.filter.CsrfCookieFilter;
 import com.andrew.springsecuritybasic.filter.RequestValidationBeforeFilter;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +44,10 @@ public class ProjectSecurityConfig {
                 .ignoringRequestMatchers("/contact", "/register")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
         .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
-        .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class);
+        .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+        .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+        .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class);
+
 
         return http.build();
     }
