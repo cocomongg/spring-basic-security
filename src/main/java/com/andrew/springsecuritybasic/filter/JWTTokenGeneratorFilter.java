@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
-    private final static String JWT_KEY = "abasd154HASD124kfas";
+    private final static String JWT_KEY = "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4";
     private final static String JWT_HEADER = "Authorization";
 
     @Override
@@ -30,15 +30,12 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
         if (null != authentication) {
             SecretKey secretKey = Keys.hmacShaKeyFor(JWT_KEY.getBytes(StandardCharsets.UTF_8));
 
-            String jwt = Jwts.builder()
-                    .claims()
-                    .issuer("Eazy Bank")
-                    .subject("JWT Token")
+            String jwt = Jwts.builder().issuer("Eazy Bank").subject("JWT Token")
+                    .claim("username", authentication.getName())
+                    .claim("authorities", populateAuthorities(authentication.getAuthorities()))
                     .issuedAt(new Date())
-                    .add("username", authentication.getName())
-                    .add("authorities", populateAuthorities(authentication.getAuthorities()))
-                    .expiration(new Date(new Date().getTime() + 300000000))
-                    .and().signWith(secretKey).compact();
+                    .expiration(new Date((new Date()).getTime() + 30000000))
+                    .signWith(secretKey).compact();
 
             response.setHeader(JWT_HEADER, jwt);
         }

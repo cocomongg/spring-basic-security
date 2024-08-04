@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
-    private final static String JWT_KEY = "abasd154HASD124kfas";
+    private final static String JWT_KEY = "jxgEQeXHuPq8VdbyYFNkANdudQ53YUn4";
     private final static String JWT_HEADER = "Authorization";
 
     @Override
