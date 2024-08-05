@@ -1,6 +1,7 @@
 package com.andrew.springsecuritybasic.config;
 
 import com.andrew.springsecuritybasic.filter.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -23,6 +24,7 @@ import java.util.List;
 public class ProjectSecurityConfig {
 
     @Bean
+    @ConditionalOnProperty(value = "service.security.type", havingValue = "default", matchIfMissing = false)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
